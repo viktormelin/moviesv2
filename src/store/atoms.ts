@@ -1,3 +1,3 @@
-import { atom } from 'jotai';
+import { atomWithStorage } from 'jotai/utils';
 
-export const menuAtom = atom('movies');
+export const menuStateAtom = atomWithStorage('savedPage', 'movies');
