@@ -1,5 +1,6 @@
 import Head from 'next/head';
-import { ActionIcon, Box, Text, TextInput } from '@mantine/core';
+import { ActionIcon, Box, Text, TextInput, Skeleton } from '@mantine/core';
+import { Carousel } from '@mantine/carousel';
 import { useMediaQuery } from '@mantine/hooks';
 import { useState } from 'react';
 import Sidebar from '@/components/Sidebar';
@@ -7,7 +8,9 @@ import type { GetServerSideProps } from 'next';
 import prisma from '@/lib/prisma';
 import type { User } from '@prisma/client';
 import Icon from '@/components/Icon';
-import { useQuery, useQueryClient } from 'react-query';
+import { useQuery } from 'react-query';
+import { getMoviesInTheatre, getTrendingMovies } from '@/services/queries';
+import CarouselContainer from '@/components/Carousel';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const sessionToken =
@@ -45,14 +48,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 };
 
 const Home = ({ user }: { user: User }) => {
-  const queryClient = useQueryClient();
   const desktop = useMediaQuery('(min-width:900px)');
 
   const [searchQuery, setSearchQuery] = useState<string>('');
 
-  const getMoviesInTheatre = async () => {
-    return await fetch(`/api/movies/discover/theatres`);
-  };
+  const trendingMovies = useQuery('trendingMovies', getTrendingMovies);
+  const moviesInTheatre = useQuery('moviesInTheatre', getMoviesInTheatre);
 
   const submitSearch = () => {
     console.log(searchQuery);
@@ -63,8 +64,6 @@ const Home = ({ user }: { user: User }) => {
       submitSearch();
     }
   };
-
-  const movies = useQuery('movies_in_theatre', getMoviesInTheatre);
 
   return (
     <>
@@ -91,7 +90,6 @@ const Home = ({ user }: { user: User }) => {
         sx={{
           display: 'flex',
           height: '100vh',
-          width: '100%',
           backgroundImage: 'linear-gradient(to bottom, rgb(38, 38, 38, 0.9) 10%, rgb(13, 13, 13))',
         }}
       >
@@ -99,13 +97,21 @@ const Home = ({ user }: { user: User }) => {
         <Box
           component="main"
           sx={{
+            flex: 1,
             height: '100%',
+            width: 'calc(100% - 18rem)',
             padding: '2rem',
             display: 'flex',
             flexDirection: 'column',
+            gap: '5rem',
+            overflowY: 'auto',
           }}
         >
-          <Box>
+          <Box
+            sx={{
+              width: '30%',
+            }}
+          >
             <TextInput
               onSubmit={submitSearch}
               icon={<Icon icon="search" />}
@@ -122,6 +128,30 @@ const Home = ({ user }: { user: User }) => {
               placeholder="Search everything..."
               rightSectionWidth={50}
             />
+          </Box>
+          <Box>
+            <Text
+              component="h2"
+              sx={{
+                marginBottom: '1rem',
+                fontSize: '1.3rem',
+              }}
+            >
+              Trending today
+            </Text>
+            <CarouselContainer loading={trendingMovies.isLoading} data={trendingMovies.data?.data.results} />
+          </Box>
+          <Box>
+            <Text
+              component="h2"
+              sx={{
+                marginBottom: '1rem',
+                fontSize: '1.3rem',
+              }}
+            >
+              Movies playing now
+            </Text>
+            <CarouselContainer loading={moviesInTheatre.isLoading} data={moviesInTheatre.data?.data.results} />
           </Box>
         </Box>
       </Box>
