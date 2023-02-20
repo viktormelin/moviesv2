@@ -2,15 +2,23 @@ import { Box, Text } from '@mantine/core';
 import Icon from '@/components/Icon';
 import ButtonStyled from '../Styles/Button/ButtonStyle';
 import { useSetAtom } from 'jotai';
-import { menuAtom } from '@/store/atoms';
+import { menuStateAtom } from '@/store/atoms';
 import Image from 'next/image';
 import logo from '@/assets/images/dixxel-movies-logo-transparent.png';
 import type { User } from '@prisma/client';
+import { useRouter } from 'next/router';
 
 const Sidebar = ({ user }: { user: User }) => {
-  const setCurrentMenu = useSetAtom(menuAtom);
+  const router = useRouter();
+  const setCurrentMenu = useSetAtom(menuStateAtom);
 
   const onClick = (name: string) => {
+    let destination = name;
+    if (name === 'movies') {
+      destination = '';
+    }
+
+    void router.push(`/${destination}`);
     setCurrentMenu(name);
   };
 
