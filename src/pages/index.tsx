@@ -1,16 +1,14 @@
 import Head from 'next/head';
-import { ActionIcon, Box, Text, TextInput, Skeleton } from '@mantine/core';
-import { Carousel } from '@mantine/carousel';
+import { Box, Text } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
-import { useState } from 'react';
 import Sidebar from '@/components/Sidebar';
 import type { GetServerSideProps } from 'next';
 import prisma from '@/lib/prisma';
 import type { User } from '@prisma/client';
-import Icon from '@/components/Icon';
 import { useQuery } from 'react-query';
 import { getMoviesInTheatre, getTrendingMovies } from '@/services/queries';
 import CarouselContainer from '@/components/Carousel';
+import SearchBar from '@/components/SearchBar';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const sessionToken =
@@ -50,20 +48,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 const Home = ({ user }: { user: User }) => {
   const desktop = useMediaQuery('(min-width:900px)');
 
-  const [searchQuery, setSearchQuery] = useState<string>('');
-
   const trendingMovies = useQuery('trendingMovies', getTrendingMovies);
   const moviesInTheatre = useQuery('moviesInTheatre', getMoviesInTheatre);
-
-  const submitSearch = () => {
-    console.log(searchQuery);
-  };
-
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
-      submitSearch();
-    }
-  };
 
   return (
     <>
@@ -107,28 +93,7 @@ const Home = ({ user }: { user: User }) => {
             overflowY: 'auto',
           }}
         >
-          <Box
-            sx={{
-              width: '30%',
-            }}
-          >
-            <TextInput
-              onSubmit={submitSearch}
-              icon={<Icon icon="search" />}
-              size="lg"
-              variant="filled"
-              radius="xl"
-              onChange={(event) => setSearchQuery(event.currentTarget.value)}
-              onKeyDown={handleKeyDown}
-              rightSection={
-                <ActionIcon onClick={submitSearch} variant="filled" color="blue" radius="xl">
-                  <Icon icon="arrow-right" />
-                </ActionIcon>
-              }
-              placeholder="Search everything..."
-              rightSectionWidth={50}
-            />
-          </Box>
+          <SearchBar />
           <Box>
             <Text
               component="h2"
@@ -139,7 +104,7 @@ const Home = ({ user }: { user: User }) => {
             >
               Trending today
             </Text>
-            <CarouselContainer loading={trendingMovies.isLoading} data={trendingMovies.data?.data.results} />
+            <CarouselContainer loading={trendingMovies.isLoading} data={trendingMovies.data?.data} />
           </Box>
           <Box>
             <Text
@@ -151,7 +116,7 @@ const Home = ({ user }: { user: User }) => {
             >
               Movies playing now
             </Text>
-            <CarouselContainer loading={moviesInTheatre.isLoading} data={moviesInTheatre.data?.data.results} />
+            <CarouselContainer loading={moviesInTheatre.isLoading} data={moviesInTheatre.data?.data} />
           </Box>
         </Box>
       </Box>

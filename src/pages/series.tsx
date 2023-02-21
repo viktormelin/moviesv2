@@ -11,6 +11,7 @@ import Icon from '@/components/Icon';
 import { useQuery } from 'react-query';
 import { getMoviesInTheatre, getSeriesPlaying, getTrendingMovies, getTrendingSeries } from '@/services/queries';
 import CarouselContainer from '@/components/Carousel';
+import SearchBar from '@/components/SearchBar';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const sessionToken =
@@ -107,28 +108,7 @@ const Home = ({ user }: { user: User }) => {
             overflowY: 'auto',
           }}
         >
-          <Box
-            sx={{
-              width: '30%',
-            }}
-          >
-            <TextInput
-              onSubmit={submitSearch}
-              icon={<Icon icon="search" />}
-              size="lg"
-              variant="filled"
-              radius="xl"
-              onChange={(event) => setSearchQuery(event.currentTarget.value)}
-              onKeyDown={handleKeyDown}
-              rightSection={
-                <ActionIcon onClick={submitSearch} variant="filled" color="blue" radius="xl">
-                  <Icon icon="arrow-right" />
-                </ActionIcon>
-              }
-              placeholder="Search everything..."
-              rightSectionWidth={50}
-            />
-          </Box>
+          <SearchBar />
           <Box>
             <Text
               component="h2"
@@ -139,7 +119,7 @@ const Home = ({ user }: { user: User }) => {
             >
               Trending today
             </Text>
-            <CarouselContainer loading={trendingSeries.isLoading} data={trendingSeries.data?.data.results} />
+            <CarouselContainer loading={trendingSeries.isLoading} data={trendingSeries.data?.data} />
           </Box>
           <Box>
             <Text
@@ -151,7 +131,7 @@ const Home = ({ user }: { user: User }) => {
             >
               TV shows playing now
             </Text>
-            <CarouselContainer loading={seriesPlayingNow.isLoading} data={seriesPlayingNow.data?.data.results} />
+            <CarouselContainer loading={seriesPlayingNow.isLoading} data={seriesPlayingNow.data?.data} />
           </Box>
         </Box>
       </Box>
