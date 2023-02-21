@@ -1,10 +1,12 @@
-import { Box, Text, Skeleton } from '@mantine/core';
+import { Box, Skeleton } from '@mantine/core';
 import { Carousel } from '@mantine/carousel';
-import type { Movie } from '@/types/typings';
+import type { MovieDetails, MovieResponse, TVDetails, TVResponse } from '@/types/typings';
+import MovieCard from '../Movie';
+import TVCard from '../TV';
 
 interface Props {
   loading: boolean;
-  data: Movie[] | undefined;
+  data: MovieResponse | TVResponse | undefined;
 }
 
 const CarouselContainer = ({ loading, data }: Props) => {
@@ -23,27 +25,16 @@ const CarouselContainer = ({ loading, data }: Props) => {
         </Box>
       ) : null}
       {data &&
-        data.map((movie) => (
+        data.results &&
+        data.results.map((movie) => (
           <Carousel.Slide
             key={movie.id}
             sx={{
               display: 'flex',
             }}
           >
-            <Box
-              sx={{
-                height: '100%',
-                width: '100%',
-                display: 'flex',
-                alignItems: 'flex-end',
-                borderRadius: '0.25rem',
-                backgroundImage: `url(https://image.tmdb.org/t/p/w500${movie.poster_path})`,
-                backgroundPosition: 'center',
-                backgroundSize: 'cover',
-              }}
-            >
-              <Text>{movie.title}</Text>
-            </Box>
+            {data.type === 'movie' ? <MovieCard movie={movie as MovieDetails} type={data.type} /> : null}
+            {data.type === 'tv' ? <TVCard movie={movie as TVDetails} type={data.type} /> : null}
           </Carousel.Slide>
         ))}
     </Carousel>
