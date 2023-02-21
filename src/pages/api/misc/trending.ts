@@ -12,8 +12,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       params: { api_key: process.env.TMDB_API_KEY_V3 },
     });
 
-    console.log(response);
-
     if (response.status === 200) {
       return res.status(200).json({ ...response.data });
     }
