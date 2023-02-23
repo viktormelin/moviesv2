@@ -24,3 +24,8 @@ export const getTrendingSeries = async () => {
   response.data.type = 'tv';
   return response;
 };
+
+export const getSearchResult = async ({ query }: { query: string }) => {
+  const response = await axios.get<any>(`api/misc/search?query=${query}`);
+  return response;
+};
