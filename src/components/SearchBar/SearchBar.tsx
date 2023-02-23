@@ -1,4 +1,5 @@
 import { ActionIcon, Box, Modal, TextInput, Text, Image, Center } from '@mantine/core';
+import { ActionIcon, Box, Modal, TextInput, Text, Image, Center } from '@mantine/core';
 import { useState } from 'react';
 import Icon from '../Icon';
 import axios from 'axios';
