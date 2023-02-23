@@ -31,8 +31,6 @@ interface LocalResponse {
 const SearchBar = () => {
   const router = useRouter();
 
-  const router = useRouter();
-
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [searchResult, setSearchResult] = useState<LocalResponse | undefined>(undefined);
 
@@ -48,10 +46,6 @@ const SearchBar = () => {
     if (event.key === 'Enter') {
       void submitSearch();
     }
-  };
-
-  const onClick = (item: LocalMedia) => {
-    void router.push(`/item/${item.id}?type=${item.media_type}`);
   };
 
   const onClick = (item: LocalMedia) => {
@@ -86,20 +80,7 @@ const SearchBar = () => {
         {searchResult?.results.map((item) => (
           <Box
             onClick={() => onClick(item)}
-            onClick={() => onClick(item)}
             key={item.id}
-            sx={(theme) => ({
-              'cursor': 'pointer',
-              'height': '6rem',
-              'width': '100%',
-              'padding': '0.5rem',
-              'display': 'flex',
-              'gap': '1rem',
-              'borderRadius': '0.25rem',
-              '&:hover': {
-                backgroundColor: theme.colors.dark[6],
-              },
-            })}
             sx={(theme) => ({
               'cursor': 'pointer',
               'height': '6rem',
