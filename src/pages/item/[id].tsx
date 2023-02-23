@@ -68,30 +68,35 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
-const ItemPage = ({ user, movie, tv }: { user: User; movie?: MovieDetails; tv?: TVDetails }) => {
+const ItemPage = ({ user, movie, tv }: { user: User; movie: MovieDetails; tv: TVDetails }) => {
   const router = useRouter();
   const { id, type } = router.query;
 
   return (
     <>
       <Head>
-        <title>Dixxel Movies</title>
+        <title>Dixxel Movies - {movie.title ?? tv.name}</title>
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="description" content="" />
+        <meta name="description" content={movie.overview ?? tv.overview} />
         {/* <link rel='icon' href='/favicon.ico' /> */}
         <link rel="icon" type="image/png" href="/cf-wrapper-logo-transparent.png" />
 
-        <meta property="og:url" content="https://movies.dixxel.io/" />
+        <meta property="og:url" content={router.pathname} />
         <meta property="og:type" content="website" />
-        <meta property="og:title" content="Dixxel Movies" />
-        <meta property="og:description" content="" />
+        <meta property="og:title" content={`Dixxel Movies - ${movie.title ?? tv.name}`} />
+        <meta property="og:description" content={movie.overview ?? tv.overview} />
+        <meta property="og:site_name" content="Dixxel Movies" />
+        <meta
+          property="og:image"
+          content={`https://image.tmdb.org/t/p/original${movie.poster_path ?? tv.poster_path}`}
+        />
 
         <meta name="twitter:card" content="summary_large_image" />
         <meta property="twitter:domain" content="movies.dixxel.io" />
-        <meta property="twitter:url" content="https://movies.dixxel.io/" />
-        <meta name="twitter:title" content="Dixxel Movies" />
-        <meta name="twitter:description" content="" />
+        <meta property="twitter:url" content={router.pathname} />
+        <meta name="twitter:title" content={`Dixxel Movies - ${movie.title ?? tv.name}`} />
+        <meta name="twitter:description" content={movie.overview ?? tv.overview} />
       </Head>
       <Box
         sx={{
