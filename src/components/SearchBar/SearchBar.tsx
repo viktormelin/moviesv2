@@ -2,32 +2,34 @@ import { ActionIcon, Box, Modal, TextInput, Text, Image, Center } from '@mantine
 import { useState } from 'react';
 import Icon from '../Icon';
 import axios from 'axios';
-
+import { useRouter } from 'next/router';
+interface LocalMedia {
+  adult: boolean;
+  backdrop_path: string;
+  genre_ids: string[];
+  id: number;
+  original_language: string;
+  original_title: string;
+  overview: string;
+  popularity: number;
+  poster_path: string;
+  release_date: string;
+  name: string;
+  title: string;
+  video: boolean;
+  vote_average: number;
+  vote_count: number;
+  runtime: number;
+  number_of_episodes: number;
+  media_type: string;
+}
 interface LocalResponse {
-  results: [
-    {
-      adult: boolean;
-      backdrop_path: string;
-      genre_ids: string[];
-      id: number;
-      original_language: string;
-      original_title: string;
-      overview: string;
-      popularity: number;
-      poster_path: string;
-      release_date: string;
-      name: string;
-      title: string;
-      video: boolean;
-      vote_average: number;
-      vote_count: number;
-      runtime: number;
-      number_of_episodes: number;
-    }
-  ];
+  results: LocalMedia[];
 }
 
 const SearchBar = () => {
+  const router = useRouter();
+
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [searchResult, setSearchResult] = useState<LocalResponse | undefined>(undefined);
 
@@ -43,6 +45,10 @@ const SearchBar = () => {
     if (event.key === 'Enter') {
       void submitSearch();
     }
+  };
+
+  const onClick = (item: LocalMedia) => {
+    void router.push(`/item/${item.id}?type=${item.media_type}`);
   };
 
   return (
@@ -72,14 +78,20 @@ const SearchBar = () => {
       <Modal opened={searchResult?.results !== undefined} onClose={() => setSearchResult(undefined)}>
         {searchResult?.results.map((item) => (
           <Box
+            onClick={() => onClick(item)}
             key={item.id}
-            sx={{
-              height: '6rem',
-              width: '100%',
-              padding: '0.5rem',
-              display: 'flex',
-              gap: '1rem',
-            }}
+            sx={(theme) => ({
+              'cursor': 'pointer',
+              'height': '6rem',
+              'width': '100%',
+              'padding': '0.5rem',
+              'display': 'flex',
+              'gap': '1rem',
+              'borderRadius': '0.25rem',
+              '&:hover': {
+                backgroundColor: theme.colors.dark[6],
+              },
+            })}
           >
             <Box
               sx={{
