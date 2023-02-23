@@ -26,6 +26,30 @@ interface LocalMedia {
 }
 interface LocalResponse {
   results: LocalMedia[];
+=======
+
+interface LocalResponse {
+  results: [
+    {
+      adult: boolean;
+      backdrop_path: string;
+      genre_ids: string[];
+      id: number;
+      original_language: string;
+      original_title: string;
+      overview: string;
+      popularity: number;
+      poster_path: string;
+      release_date: string;
+      name: string;
+      title: string;
+      video: boolean;
+      vote_average: number;
+      vote_count: number;
+      runtime: number;
+      number_of_episodes: number;
+    }
+  ];
 }
 
 const SearchBar = () => {
@@ -93,6 +117,14 @@ const SearchBar = () => {
                 backgroundColor: theme.colors.dark[6],
               },
             })}
+            key={item.id}
+            sx={{
+              height: '6rem',
+              width: '100%',
+              padding: '0.5rem',
+              display: 'flex',
+              gap: '1rem',
+            }}
           >
             <Box
               sx={{
