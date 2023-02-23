@@ -3,7 +3,6 @@ import { useState } from 'react';
 import Icon from '../Icon';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-
 interface LocalMedia {
   adult: boolean;
   backdrop_path: string;
