@@ -1,7 +1,3 @@
-# Cloudflare Images Wrapper
-
-Created to help utilise Cloudflare Images in a better looking and easier way, with built in endpoints for uploading from 3rd party applications coming.
-
 ## Tech Stack
 
 **Project bootstrapped with [Next.js](https://nextjs.org/)**  
